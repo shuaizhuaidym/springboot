@@ -1,0 +1,26 @@
+<binding xmlns:ns1="http://example.com/springboot/message" name="binding" package="com.example.springboot.message">
+  <namespace uri="http://example.com/springboot/message" default="elements"/>
+  <mapping abstract="true" type-name="ns1:request" class="com.example.springboot.message.Request">
+    <structure field="head" usage="optional" name="head">
+      <value style="element" name="version" field="version" usage="optional"/>
+      <value style="element" name="serviceType" field="serviceType" usage="optional"/>
+    </structure>
+    <structure field="body" usage="optional" name="body">
+      <structure field="clientInfo" usage="optional" name="clientInfo">
+        <value style="element" name="clientIP" field="clientIP" usage="optional"/>
+      </structure>
+      <value style="element" name="appId" field="appId" usage="optional"/>
+      <value style="attribute" name="accessControl" field="accessControl"/>
+      <structure field="authen" usage="optional" name="authen">
+        <structure field="authCredential" usage="optional" name="authCredential">
+          <value style="attribute" name="authMode" field="authMode" usage="optional"/>
+          <value style="element" name="token" field="token" usage="optional"/>
+          <value style="element" name="qrcode" field="qrcode" usage="optional"/>
+        </structure>
+      </structure>
+    </structure>
+  </mapping>
+  <mapping class="com.example.springboot.message.Request" name="request">
+    <structure map-as="ns1:request"/>
+  </mapping>
+</binding>
