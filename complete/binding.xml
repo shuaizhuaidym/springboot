@@ -13,7 +13,7 @@
       <value style="attribute" name="accessControl" field="accessControl"/>
       <structure field="authen" usage="optional" name="authen">
         <structure field="authCredential" usage="optional" name="authCredential">
-          <value style="attribute" name="authMode" field="authMode" usage="optional"/>
+          <value style="element" name="authMode" field="authMode" usage="optional"/>
           <value style="element" name="token" field="token" usage="optional"/>
           <value style="element" name="qrcode" field="qrcode" usage="optional"/>
         </structure>

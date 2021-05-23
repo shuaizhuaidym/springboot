@@ -6,7 +6,7 @@ Ant build file for JiBX data binding code to schema starter example.
 
 =================================================================== -->
 
-<project basedir="E:/Cloudwork/gs-spring-boot-main/complete" default="bindgen">
+<project basedir="." default="bindgen">
   
   <!-- The following block is intended to set the jibx-home location. It first
    checks the relative location of the JiBX libraries when this starter example
@@ -15,7 +15,7 @@ Ant build file for JiBX data binding code to schema starter example.
    to just set the path directly in this file, uncomment the following line and
    set the value to the appropriate directory, then delete the rest of the Ant
    commands down to the end of this block. -->
-  <property name="jibx-home" value="E:/Cloudwork/jibx"/>
+  <property name="jibx-home" value="./jibx"/>
 	<!--  <available file="./lib/jibx-bind.jar" property="jibx-home" value="../.."/>
 	<property environment="env"/>
   <condition property="jibx-home" value="${env.JIBX_HOME}">
@@ -45,7 +45,7 @@ Ant build file for JiBX data binding code to schema starter example.
   <path id="classpath">
     <fileset dir="${jibx-home}/lib" includes="*.jar"/>
   	<fileset dir="${basedir}/target/lib" includes="*.jar"/>
-    <pathelement location="bin"/>
+    <pathelement location="${basedir}/target/classes"/>
   </path>
   
   <!-- make sure runtime jars are present -->
@@ -80,7 +80,7 @@ Ant build file for JiBX data binding code to schema starter example.
     <echo message="Compiling Java source code"/>
     <delete quiet="true" dir="${basedir}/bin"/>
     <mkdir dir="${basedir}/bin"/>
-    <javac srcdir="${basedir}/src/main/java/" destdir="${basedir}/bin" debug="on">
+    <javac srcdir="${basedir}/src/main/java/" destdir="${basedir}/bin" debug="on" encoding="UTF-8">
       <classpath refid="classpath"/>
     </javac>
     
@@ -91,9 +91,12 @@ Ant build file for JiBX data binding code to schema starter example.
   
     <echo message="Running BindGen tool from ${basedir}"/>
     <java classpathref="classpath" fork="true" failonerror="true" classname="org.jibx.binding.generator.BindGen">
-      <arg value="-s"/>
-      <arg value="${basedir}/target/classes"/>
+    	<arg value="-v"/>
+      
+      <arg value="-ss"/>
+      <arg value="${basedir}\target\classes\com\example\springboot\message\"/>
       <arg value="com.example.springboot.message.Request"/>
+      
     </java>
     
   </target>
