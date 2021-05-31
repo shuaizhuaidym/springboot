@@ -31,12 +31,12 @@ public class PkiHelper {
 
     static {
         try {
+            LOG.info("java.library.path is,"+System.getProperty("java.library.path"));
+            PKIToolkits.initialize();
             toolkits = PKIToolkits.getInstance();
         } catch (PKIException e) {
-            e.printStackTrace();
             LOG.error("CertUtil initialize Exception " + e.getErrDesc(), "initialize");
         } catch (Exception e) {
-            e.printStackTrace();
             LOG.error("CertUtil initialize Exception " + e.getMessage(), "initialize");
         }
 

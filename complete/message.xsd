@@ -1,5 +1,6 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://example.com/springboot/message" elementFormDefault="qualified" targetNamespace="http://example.com/springboot/message">
-  <xs:complexType name="request">
+  <xs:element type="tns:message" name="message"/>
+  <xs:complexType name="message">
     <xs:sequence>
       <xs:element name="head" minOccurs="0">
         <xs:complexType>
@@ -27,8 +28,8 @@
                     <xs:complexType>
                       <xs:sequence>
                         <xs:element type="xs:string" name="authMode" minOccurs="0"/>
-                        <xs:element type="xs:string" name="token" minOccurs="0"/>
-                        <xs:element type="xs:string" name="qrcode" minOccurs="0"/>
+                        <xs:element type="xs:string" name="detach" minOccurs="0"/>
+                        <xs:element type="xs:string" name="original" minOccurs="0"/>
                       </xs:sequence>
                     </xs:complexType>
                   </xs:element>
@@ -41,5 +42,4 @@
       </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:element type="tns:request" name="request"/>
 </xs:schema>

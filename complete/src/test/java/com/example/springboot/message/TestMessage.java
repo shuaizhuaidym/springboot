@@ -21,8 +21,8 @@ public class TestMessage {
 
 	private final String CHAR_SET = "utf-8";
 
-	String toXML(Request request) throws JiBXException, IOException {
-		factory = BindingDirectory.getFactory(Request.class);
+	String toXML(Message request) throws JiBXException, IOException {
+		factory = BindingDirectory.getFactory(Message.class);
 		writer=new StringWriter();
 		IMarshallingContext mctx = factory.createMarshallingContext();
 		mctx.setIndent(4);
@@ -34,23 +34,24 @@ public class TestMessage {
 		return xml;
 	}
 
-	Request fromXML(String xml) throws JiBXException {
+	Message fromXML(String xml) throws JiBXException {
 		reader = new StringReader(xml);
 
 		IUnmarshallingContext uctx = factory.createUnmarshallingContext();
-		Request req = (Request) uctx.unmarshalDocument(reader);
+		Message req = (Message) uctx.unmarshalDocument(reader);
 
 		return req;
 
 	}
 
 	public static void main(String[] args) throws JiBXException, IOException {
+	    System.out.println(TestMessage.class.getClassLoader());
 		TestMessage test = new TestMessage();
-		Request req = new Request();
+		Message req = new Message();
 		String xml = test.toXML(req);
-		logger.info("Serial result:" + xml);
+		logger.info(String.format("Serial result:%s\r\n", xml));
 
-		Request request = test.fromXML(xml);
+		Message request = test.fromXML(xml);
 		logger.info("Deserial result:" + request.toString());
 	}
 }

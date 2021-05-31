@@ -93,9 +93,9 @@ Ant build file for JiBX data binding code to schema starter example.
     <java classpathref="classpath" fork="true" failonerror="true" classname="org.jibx.binding.generator.BindGen">
     	<arg value="-v"/>
       
-      <arg value="-ss"/>
+      <arg value="-s"/>
       <arg value="${basedir}\target\classes\com\example\springboot\message\"/>
-      <arg value="com.example.springboot.message.Request"/>
+      <arg value="com.example.springboot.message.Message"/>
       
     </java>
     

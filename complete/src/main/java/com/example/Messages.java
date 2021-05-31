@@ -1,7 +1,6 @@
 package com.example;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
@@ -9,9 +8,11 @@ import java.util.ResourceBundle.Control;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.example.pki.PlatformControl;
+
 /**
  * <p>
- * 鍥介檯鍖栧伐鍏风被锛岀敤浜庤幏鍙栧钩鍙扮殑鍥介檯鍖栦俊鎭��
+ * 国际化工具类，用于获取平台的国际化信息。
  * </p>
  * 
  * @author Jove
@@ -24,16 +25,16 @@ public class Messages {
 
     private static ResourceBundle RESOURCE_BUNDLE;
     static {
-        // 鍔犺浇鍥介檯鍖栬祫婧�
+        // 加载国际化资源
         load(Locale.getDefault());
     }
 
     /**
      * <p>
-     * 鑾峰彇鎸囧畾鐨凨ey瀵瑰簲鐨勫浗闄呭寲鍜屽弬鏁板寲鍚庣殑淇℃伅銆�
+     * 获取指定的Key对应的国际化和参数化后的信息。
      * </p>
      * <p>
-     * 鍙傝�冪ず渚嬶細
+     * 参考示例：
      * <ul>
      * <li>Messages.getString("F0BF0001");</li>
      * <li>Messages.getString("F0BF0001", "1");</li>
@@ -43,19 +44,18 @@ public class Messages {
      * </p>
      * 
      * @param key
-     *            鎸囧畾鐢ㄤ簬鏌ユ壘鍥介檯鍖栦俊鎭殑Key鍊笺��
+     *            指定用于查找国际化信息的Key值。
      * @param args
-     *            鎸囧畾鐨凨ey瀵瑰簲鐨勫浗闄呭寲鍜屽弬鏁板寲淇℃伅銆�
-     * @return
-     *         <ul>
-     *         <li>褰撳弬鏁癒ey鍜屽弬鏁癮rgs鍚屾椂浼犲叆鏃讹紝杩斿洖鎸囧畾鐨凨ey瀵瑰簲鐨勫浗闄呭寲鍜屽弬鏁板寲淇℃伅</li>
-     *         <li>褰撳彧浼犲叆Key鏃讹紝鍙繑鍥炲搴旂殑鍥介檯鍖栦俊鎭�</li>
-     *         <li>褰撳弬鏁癒ey涓簄ull鎴栬幏鍙栧搴旂殑鍥介檯鍖栦俊鎭け璐ユ椂锛屽師鏍疯繑鍥炲弬鏁癒ey鐨勫��</li>
-     *         <li>褰撳弬鏁癮rgs鍊间腑鍑虹幇null鏃讹紝灏嗚鏇挎崲涓哄瓧绗︿覆褰㈠紡鐨�"null"</li>
+     *            指定的Key对应的国际化和参数化信息。
+     * @return <ul>
+     *         <li>当参数Key和参数args同时传入时，返回指定的Key对应的国际化和参数化信息</li>
+     *         <li>当只传入Key时，只返回对应的国际化信息</li>
+     *         <li>当参数Key为null或获取对应的国际化信息失败时，原样返回参数Key的值</li>
+     *         <li>当参数args值中出现null时，将被替换为字符串形式的"null"</li>
      *         </ul>
      */
     public static String getString(final String key, final Object... args) {
-        // 鍏堝彇鍥介檯鍖栬祫婧�
+        // 先取国际化资源
         if (logger.isDebugEnabled()) {
             logger.debug("Get the I18N value for key: " + key);
         }
@@ -63,7 +63,7 @@ public class Messages {
         try {
             value = RESOURCE_BUNDLE.getString(key);
         } catch (Throwable t) {
-            // 鍑洪敊鍚庤褰曟棩蹇楋紝鍘熸牱杩斿洖Key鍊�
+            // 出错后记录日志，原样返回Key值
             if (logger.isErrorEnabled()) {
                 String iString = "Invalid Key: " + key;
                 iString += " (locale=" + RESOURCE_BUNDLE.getLocale() + ").";
@@ -72,30 +72,30 @@ public class Messages {
             return key;
         }
 
-        // 濡傛灉娌℃湁鍙傛暟锛屽垯鐩存帴杩斿洖鍥介檯鍖栦俊鎭�
+        // 如果没有参数，则直接返回国际化信息
         if ((args == null) || (args.length == 0)) {
             logger.debug("No arguments just return I18N information.");
             return value;
         }
 
-        // 濡傛灉鏈夊弬鏁帮紝鍒欐鏌ュ弬鏁板�兼槸鍚︽湁鏄痭ull鐨勶紝鐒跺悗鍐嶅仛鍙傛暟鍖栧鐞�
+        // 如果有参数，则检查参数值是否有是null的，然后再做参数化处理
         logger.debug("Has arguments do arguments format.");
         try {
             Object[] nonNullArgs = args;
             for (int i = 0; i < args.length; i++) {
                 if (args[i] == null) {
                     logger.debug("Some arguments have value: [null], use \"null\" instead.");
-                    // 濡傛灉鍙傛暟鍊兼湁涓簄ull鐨勶紝鍏堝皢鍙傛暟鎷疯礉涓�浠斤紙閬垮厤褰卞搷璋冪敤鑰呭鍙傛暟鐨勫悗缁娇鐢級
+                    // 如果参数值有为null的，先将参数拷贝一份（避免影响调用者对参数的后续使用）
                     if (nonNullArgs == args) {
                         nonNullArgs = (Object[]) args.clone();
                     }
-                    // 灏嗗�艰缃负瀛楃涓插舰寮忕殑null锛岄槻姝㈢▼搴忔姤閿�
+                    // 将值设置为字符串形式的null，防止程序报错
                     nonNullArgs[i] = "null";
                 }
             }
             return MessageFormat.format(value, nonNullArgs);
         } catch (Throwable t) {
-            // 鍑洪敊鍚庤褰曟棩蹇楋紝鍘熸牱杩斿洖鍥介檯鍖栦俊鎭�
+            // 出错后记录日志，原样返回国际化信息
             if (logger.isErrorEnabled()) {
                 String iString = "Invalid message format: " + value + "(";
                 for (int i = 0; i < args.length; i++) {
@@ -110,11 +110,11 @@ public class Messages {
 
     /**
      * <p>
-     * 閲嶆柊鍔犺浇鍥介檯鍖栬祫婧愩��
+     * 重新加载国际化资源。
      * </p>
      * 
      * @param targetLocale
-     *            鎸囧畾瑕佸姞杞界殑璇█鐜锛屼笉鎸囧畾浣跨敤榛樿鐨勩��
+     *            指定要加载的语言环境，不指定使用默认的。
      */
     public static void reload(Locale targetLocale) {
         ResourceBundle.clearCache();
@@ -123,18 +123,18 @@ public class Messages {
 
     /**
      * <p>
-     * 鍔犺浇鍥介檯鍖栬祫婧愩��
+     * 加载国际化资源。
      * </p>
      * 
      * @param targetLocale
-     *            鎸囧畾瑕佸姞杞界殑璇█鐜锛屼笉鎸囧畾浣跨敤榛樿鐨勩��
+     *            指定要加载的语言环境，不指定使用默认的。
      */
     public static void load(Locale targetLocale) {
         Locale locale = targetLocale;
         if (locale == null) {
             locale = Locale.getDefault();
         }
-        Control control = Control.getControl(new ArrayList<String>());
+        Control control = new PlatformControl();
         RESOURCE_BUNDLE = ResourceBundle.getBundle(BASE_NAME, locale, control);
     }
 
