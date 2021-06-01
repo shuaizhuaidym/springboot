@@ -19,7 +19,7 @@ public class Application {
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
 
-			System.out.println("Let's play with Spring Boot~._.~:");
+			System.out.println("Let's play with Spring Boot ^_^");
 
 			String[] beanNames = ctx.getBeanDefinitionNames();
 			Arrays.sort(beanNames);

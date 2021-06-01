@@ -89,7 +89,26 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-
+			<!-- copy jar for bindgen -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/lib</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- 用于生成JIBX 绑定映射文件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -105,13 +124,13 @@
 						<configuration>
 							<target name="bindgen">
 								<echo message="Running BindGen tool from ${basedir}" />
-								
+
 								<path id="classpath">
 									<fileset dir="target/lib" includes="*.jar" />
 									<pathelement location="target/classes" />
 								</path>
-								<java classpathref="classpath" fork="true"
-									failonerror="true" classname="org.jibx.binding.generator.BindGen">
+								<java classpathref="classpath" fork="true" failonerror="true"
+									classname="org.jibx.binding.generator.BindGen">
 									<arg value="-s" />
 									<arg value="${basedir}\target\classes" />
 									<arg value="-t" />

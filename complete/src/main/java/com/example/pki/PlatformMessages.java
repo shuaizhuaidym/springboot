@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
  * 国际化工具类，用于获取平台的国际化信息。
  * </p>
  * 
- * @author Jove
  */
 public class PlatformMessages {
 

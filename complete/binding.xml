@@ -10,10 +10,10 @@
         <value style="element" name="clientIP" field="clientIP" usage="optional"/>
       </structure>
       <value style="element" name="appId" field="appId" usage="optional"/>
-      <value style="attribute" name="accessControl" field="accessControl"/>
+      <value style="element" name="accessControl" field="accessControl"/>
       <structure field="authen" usage="optional" name="authen">
         <structure field="authCredential" usage="optional" name="authCredential">
-          <value style="element" name="authMode" field="authMode" usage="optional"/>
+          <value style="attribute" name="authMode" field="authMode" usage="optional"/>
           <value style="element" name="detach" field="detach" usage="optional"/>
           <value style="element" name="original" field="original" usage="optional"/>
         </structure>

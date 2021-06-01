@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * 平台国际化资源类，负责加载和处理平台需要的国际化资源。
+ * 国际化资源类，负责加载和处理平台需要的国际化资源。
  * </p>
  * 
  * @author Jove
